@@ -1,4 +1,17 @@
-<button (click)='startTimer()'>Start Timer</button>
-<button (click)='pauseTimer()'>Pause</button>
-<button (click)='resetTimer()'>Reset</button>
-<p>{{ name }} {{timeLeft}} Seconds Left....</p>
+<div class="text-center text-white py-5" *ngIf="this.label=='work'; else elseBlock">
+  <h1> {{ name }} </h1>
+  <div>
+    <h1> {{ timeLeft * 1000 | date:'mm:ss'}} </h1>
+  </div>
+ <button class="btn btn-lg text-white" (click)='resetTimer()'><fa-icon [icon]="faUndo"></fa-icon></button>
+ <button class="btn btn-lg btn-outline-light" (click)='startOrPauseTimer()'>{{this.isStarted ? 'Pause' : 'Start'}}</button>
+ <button class="btn btn-lg text-white" (click)='nextTimer()'><fa-icon [icon]="faForward"></fa-icon></button>
+</div>
+<ng-template #elseBlock>
+  <p> {{name}} {{timeLeft * 1000 | date:'HH:mm:ss':"+0000"}} 
+    <button class="btn btn-lg btn-block btn-outline-primary" (click)='resetTimer()'><fa-icon [icon]="faUndo"></fa-icon></button>
+    <button (click)='startOrPauseTimer()'>{{this.isStarted ? <fa-icon [icon]="faPause"></fa-icon> : <fa-icon [icon]="faPlay"></fa-icon>}}</button>
+    <button (click)='nextTimer()'><fa-icon [icon]="faForward"></fa-icon></button>
+  </p>
+</ng-template>
+

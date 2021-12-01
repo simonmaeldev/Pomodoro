@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {faUndo, faPlay, faPause, faForward} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-count-down',
@@ -7,11 +8,20 @@ import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 })
 export class CountDownComponent implements OnInit {
 
-  @Output() newCountDownEvent = new EventEmitter<string>();
+  // time management here is in seconds
+  @Output() newCountDownEvent = new EventEmitter<CountDownComponent>();
   @Input() timer:number = 5*60;
   @Input() name:string = "";
   timeLeft: number = 0;
   interval: any;
+  @Input() label:string = "";
+  isStarted:boolean = false;
+
+  //font awesome
+  faUndo = faUndo;
+  faPlay = faPlay;
+  faPause = faPause;
+  faForward = faForward;
   
   constructor() { }
 
@@ -32,7 +42,7 @@ export class CountDownComponent implements OnInit {
   }
 
   sendFinish() {
-    this.newCountDownEvent.emit(this.name);
+    this.newCountDownEvent.emit(this);
   }
   
   pauseTimer() {
@@ -42,4 +52,14 @@ export class CountDownComponent implements OnInit {
   resetTimer() {
     this.timeLeft = this.timer;
   }
+
+  startOrPauseTimer() {
+    this.isStarted = !this.isStarted;
+    this.isStarted ? this.startTimer() : this.pauseTimer();
+  }
+
+  nextTimer() {
+    this.sendFinish();
+  }
+
 }

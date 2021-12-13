@@ -8,10 +8,12 @@
  <button class="btn btn-lg text-white" (click)='nextTimer()'><fa-icon [icon]="faForward"></fa-icon></button>
 </div>
 <ng-template #elseBlock>
-  <p> {{name}} {{timeLeft * 1000 | date:'HH:mm:ss':"+0000"}} 
-    <button class="btn btn-lg btn-block btn-outline-primary" (click)='resetTimer()'><fa-icon [icon]="faUndo"></fa-icon></button>
-    <button (click)='startOrPauseTimer()'>{{this.isStarted ? <fa-icon [icon]="faPause"></fa-icon> : <fa-icon [icon]="faPlay"></fa-icon>}}</button>
-    <button (click)='nextTimer()'><fa-icon [icon]="faForward"></fa-icon></button>
-  </p>
+  <div class="text-center text-white fs-4">
+    {{name}} {{timeLeft * 1000 | date:'H:mm:ss':"+0000"}} 
+    <button class="btn btn-sm text-white" (click)='resetTimer()'><fa-icon [icon]="faUndo"></fa-icon></button>
+    <button *ngIf='this.isStarted' class="btn btn-sm text-white" (click)= 'startOrPauseTimer()'><fa-icon [icon]='faPause'></fa-icon></button>
+    <button *ngIf='!this.isStarted' class="btn btn-sm text-white" (click)= 'startOrPauseTimer()'><fa-icon [icon]='faPlay'></fa-icon></button>
+    <button class="btn btn-sm text-white" (click)='nextTimer()'><fa-icon [icon]="faForward"></fa-icon></button>
+  </div>
 </ng-template>
 

@@ -1,3 +1,10 @@
 <div class="mx-auto mt-10 bg-white bg-opacity-25 border border-5 rounded-3" style="width:25%">
   <ng-template timerWork ></ng-template>
 </div>
+<div class="mx-auto bg-green border border-2" style="width:20%">
+  <ng-template timerPosition ></ng-template>
+  <div class="text-center text-white">
+    Prochain : {{ positionTimers[getNextPositionTimer()].name }} {{ positionTimers[getNextPositionTimer()].timer * 1000 | date:'H:mm:ss':"+0000" }}
+  </div>
+</div>
+

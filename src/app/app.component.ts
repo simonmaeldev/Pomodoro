@@ -1,5 +1,6 @@
 import { Component, Renderer2, ViewChild } from '@angular/core';
 import { AppWorkDirective } from './app-work.directive';
+import { AppPosDirective } from './app-pos.directive';
 import { CountDownComponent } from './count-down/count-down.component';
 
 @Component({
@@ -10,7 +11,9 @@ import { CountDownComponent } from './count-down/count-down.component';
 export class AppComponent {
   title = 'Pomodoro';
   @ViewChild(AppWorkDirective, {static: true}) timerWork!: AppWorkDirective;
+  @ViewChild(AppPosDirective, {static: true}) timerPosition!: AppPosDirective;
   currentWorkIndex = 1;
+  currentPositionIndex = -1;
   nbPauseBeforeBig = 3;
   currentNbPauses = 1;
   
@@ -35,8 +38,27 @@ export class AppComponent {
     }
   ];
 
+  positionTimers = [
+    {
+      name : "Debout",
+      timer : 1 * 60 * 60,
+      label : "position"
+    },
+    {
+      name : "Assis",
+      timer : 2 * 60 * 60,
+      label : "position"
+    },
+    {
+      name : "Marche",
+      timer : 15 * 60,
+      label : "position"
+    }
+  ]
+  
   ngOnInit() {
     this.loadWorkTimer();
+    this.loadPositionTimer();
   }
 
   getNextWorkTimer(current:number, currentNbPauses:number) {
@@ -67,6 +89,23 @@ export class AppComponent {
     this.changeBgColor(workTimer);
   }
 
+  getNextPositionTimer() {
+    return (this.currentPositionIndex + 1) % this.positionTimers.length;
+  }
+  
+  loadPositionTimer() {
+    this.currentPositionIndex = this.getNextPositionTimer();
+    const positionTimer = this.positionTimers[this.currentPositionIndex];
+    const viewContainerRef = this.timerPosition.viewContainerRef;
+    viewContainerRef.clear();
+
+    const componentRef = viewContainerRef.createComponent<CountDownComponent>(CountDownComponent);
+    componentRef.instance.name = positionTimer.name;
+    componentRef.instance.timer = positionTimer.timer;
+    componentRef.instance.label = positionTimer.label;
+    componentRef.instance.newCountDownEvent.subscribe(val => this.sayFinish(val)); 
+  }
+  
   changeBgColor(workTimer:any) {
     if (workTimer.isPause) {
       this.renderer.removeClass(document.body, 'bg-blue');
@@ -85,6 +124,9 @@ export class AppComponent {
     this.sendNotification(countDown);
     if(countDown.label == 'work') {
       this.loadWorkTimer();
+    }
+    if(countDown.label == 'position') {
+      this.loadPositionTimer();
     }
   }
 

@@ -2,6 +2,7 @@ import { Component, Renderer2, ViewChild } from '@angular/core';
 import { AppWorkDirective } from './app-work.directive';
 import { AppPosDirective } from './app-pos.directive';
 import { CountDownComponent } from './count-down/count-down.component';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,9 @@ export class AppComponent {
   currentPositionIndex = -1;
   nbPauseBeforeBig = 3;
   currentNbPauses = 1;
+
+  //font awesome
+  faPlusCircle = faPlusCircle;
   
   workTimers = [
     {
@@ -55,12 +59,19 @@ export class AppComponent {
       label : "position"
     }
   ]
+
+  customTimers : number[] = [];
   
   ngOnInit() {
     this.loadWorkTimer();
     this.loadPositionTimer();
   }
 
+  addCustomTimer() {
+    const customTimer = this.customTimers.length;
+    this.customTimers.push(customTimer);
+  }
+  
   getNextWorkTimer(current:number, currentNbPauses:number) {
     if(this.workTimers[current].isPause) {
       return 0;

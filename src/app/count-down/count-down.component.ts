@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import {faUndo, faPlay, faPause, faForward} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
@@ -11,11 +11,13 @@ export class CountDownComponent implements OnInit {
   // time management here is in seconds
   @Output() newCountDownEvent = new EventEmitter<CountDownComponent>();
   @Input() timer:number = 5*60;
-  @Input() name:string = "";
+  @Input() name:string = "TimerName";
   timeLeft: number = 0;
   interval: any;
-  @Input() label:string = "";
+  @Input() label:string = "custom";
   isStarted:boolean = false;
+  timepickerVisible = false;
+  @Input() userTime: Date;
 
   //font awesome
   faUndo = faUndo;
@@ -23,12 +25,28 @@ export class CountDownComponent implements OnInit {
   faPause = faPause;
   faForward = faForward;
   
-  constructor() { }
+  constructor() {
+    this.userTime = new Date(1970, 0, 1);
+    this.userTime.setSeconds(this.timer);
+}
 
   ngOnInit(): void {
-    this.timeLeft = this.timer; 
+    this.timeLeft = this.timer;
+  }
+  
+  convertDateToTime() {
+    var hours = this.userTime.getHours();
+    var minutes = this.userTime.getMinutes();
+    var seconds = this.userTime.getSeconds();
+
+    this.setTimer(hours * 3600 + minutes * 60 + seconds);
   }
 
+  setTimer(t:number) {
+    this.timer = t;
+    this.timeLeft = this.timer;
+  }
+  
   startTimer():void {
     this.interval = setInterval(() => {
       if(this.timeLeft > 0) {
@@ -51,6 +69,7 @@ export class CountDownComponent implements OnInit {
 
   resetTimer() {
     this.timeLeft = this.timer;
+    this.isStarted = false;
   }
 
   startOrPauseTimer() {

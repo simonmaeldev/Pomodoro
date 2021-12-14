@@ -8,3 +8,9 @@
   </div>
 </div>
 
+<div>
+  <app-count-down *ngFor="let c of customTimers"></app-count-down>
+</div>
+<div class="text-center mt-3">
+  <button (click)="addCustomTimer()" class="btn btn-lg text-white fs-1"><fa-icon [icon]='faPlusCircle'></fa-icon></button>
+</div>

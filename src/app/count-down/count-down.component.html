@@ -9,7 +9,16 @@
 </div>
 <ng-template #elseBlock>
   <div class="text-center text-white fs-4">
-    {{name}} {{timeLeft * 1000 | date:'H:mm:ss':"+0000"}} 
+    <div *ngIf="this.label=='position'; else customTimerBlock">
+      {{ name }} {{timeLeft * 1000 | date:'H:mm:ss':"+0000"}}
+    </div>
+    <ng-template #customTimerBlock>
+      <input type="text" class="input-text text-white d-inline" [(ngModel)]="name" placeholder= {{name}}/>
+      <ng-template #popTemplate>
+	<timepicker [(ngModel)]="userTime" (ngModelChange)="convertDateToTime()" [showMeridian]="false" [showSeconds]="true" [minuteStep]="1" [secondsStep]="1"></timepicker>
+      </ng-template>
+      <div ngDefaultControl [(ngModel)]="userTime" [popover]="popTemplate" [outsideClick]="true" placement="bottom" class="d-inline"> {{ timeLeft * 1000 | date:'H:mm:ss':'+0000' }}</div>
+    </ng-template>
     <button class="btn btn-sm text-white" (click)='resetTimer()'><fa-icon [icon]="faUndo"></fa-icon></button>
     <button *ngIf='this.isStarted' class="btn btn-sm text-white" (click)= 'startOrPauseTimer()'><fa-icon [icon]='faPause'></fa-icon></button>
     <button *ngIf='!this.isStarted' class="btn btn-sm text-white" (click)= 'startOrPauseTimer()'><fa-icon [icon]='faPlay'></fa-icon></button>
